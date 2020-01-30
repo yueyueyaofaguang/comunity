@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Controller
@@ -24,7 +25,9 @@ public class AuthorizeController {
     private String redirectUri;
 
     @GetMapping("/callback")
-    public String callback(@RequestParam(required = true, name = "code") String code, @RequestParam(required = true, name = "state") String state) throws IOException {
+    public String callback(@RequestParam(required = true, name = "code") String code,
+                           @RequestParam(required = true, name = "state") String state,
+                           HttpServletRequest request) throws IOException {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setRedirect_uri(redirectUri);
@@ -33,7 +36,12 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser user = githubProvider.getUser(accessToken);
-        System.out.println(user.getLogin());
-        return "index";
+        if(user!=null){
+            request.getSession().setAttribute("user",user);
+            return "redirect:";
+            //登录成功，写cookie和session
+        }else {
+            return "redirect:";
+        }
     }
 }
