@@ -1,30 +1,44 @@
 package life.majiang.comunity.comunity.controller;
 
+import life.majiang.comunity.comunity.dto.QuestionDto;
+import life.majiang.comunity.comunity.mapper.QuestionMapper;
 import life.majiang.comunity.comunity.mapper.UserMapper;
+import life.majiang.comunity.comunity.model.Question;
 import life.majiang.comunity.comunity.model.User;
+import life.majiang.comunity.comunity.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.net.ssl.HandshakeCompletedEvent;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @Controller
 public class IndexController {
+
     @Autowired(required = false)
     private UserMapper userMapper;
+    @Autowired(required = false)
+    private QuestionService questionService;
+
     @GetMapping("/")
-    public String index(@CookieValue("token") String token, HttpServletRequest request){
+    public String index(@CookieValue(value = "token",required = false) String token,
+                        HttpServletRequest request,
+                        Model model
+    ) {
         //1.判断cookies中是否含有token
         //2.利用token去查询数据库中是否有相同的用户
         //3.选择性展示信息
-        if(token!=null){
+        if (token != null) {
             User user = userMapper.findByToken(token);
-            if(user!=null) request.getSession().setAttribute("user", user);
+            if (user != null) request.getSession().setAttribute("user", user);
         }
-
+        List<QuestionDto> questionList = questionService.list();
+        model.addAttribute("questions",questionList);
         return "index";
     }
 

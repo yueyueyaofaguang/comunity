@@ -54,21 +54,19 @@ public class PublishController {
         User user = null;
         if (token != null) {
             user = userMapper.findByToken(token);
-        }
-        if (user != null) request.getSession().setAttribute("user", user);
-        if (user == null) {
-            model.addAttribute("error", "用户未登录");
-            return "publish";
+            if (user != null) request.getSession().setAttribute("user", user);
+            Question question = new Question();
+            question.setTitle(title);
+            question.setDescription(description);
+            question.setTag(tag);
+            question.setCreator(user.getId());
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.create(question);
+            return "redirect:";
         }
 
-        Question question = new Question();
-        question.setTitle(title);
-        question.setDescription(description);
-        question.setTag(tag);
-        question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(System.currentTimeMillis());
-        questionMapper.create(question);
-        return "redirect:";
+        model.addAttribute("error", "用户未登录");
+        return "publish";
     }
 }
