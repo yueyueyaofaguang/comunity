@@ -50,7 +50,7 @@
         </div>
     </div>
 </nav>
-<div class="container-fluid">
+<div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
@@ -68,7 +68,7 @@
                         <span th:text="${question.description}"></span><br>
                         <span class="text-font" th:text="${'•'+question.commentCount+'个评论'}"></span>
                         <span class="text-font" th:text="${'•'+question.viewCount+'次浏览'}"></span>
-                        <span class="text-font" th:text="${#dates.format(question.getGmtModified(), 'dd/MMM/yyyy HH:mm')}"></span>
+                        <span class="text-font" th:text="${#dates.format(question.getGmtModified(), 'yyyy-MM-dd HH:mm:ss')}"></span>
                     </div>
                 </li>
             </ul>
