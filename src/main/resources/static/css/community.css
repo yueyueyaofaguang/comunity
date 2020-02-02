@@ -26,3 +26,8 @@ body {
     font-weight: normal;
     color: #999;
 }
+
+.navigation{
+    display: flex;
+    justify-content: center;
+}

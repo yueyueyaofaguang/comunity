@@ -1,5 +1,6 @@
 package life.majiang.comunity.comunity.controller;
 
+import life.majiang.comunity.comunity.dto.PageDto;
 import life.majiang.comunity.comunity.dto.QuestionDto;
 import life.majiang.comunity.comunity.mapper.QuestionMapper;
 import life.majiang.comunity.comunity.mapper.UserMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.net.ssl.HandshakeCompletedEvent;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +28,9 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(@CookieValue(value = "token",required = false) String token,
+    public String index(@CookieValue(value = "token", required = false) String token,
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "10") Integer size,
                         HttpServletRequest request,
                         Model model
     ) {
@@ -37,8 +41,10 @@ public class IndexController {
             User user = userMapper.findByToken(token);
             if (user != null) request.getSession().setAttribute("user", user);
         }
-        List<QuestionDto> questionList = questionService.list();
-        model.addAttribute("questions",questionList);
+        List<QuestionDto> questionList =   questionService.list(page,size);
+        PageDto pageDto = questionService.getPageDto();
+        model.addAttribute("questions", questionList);
+        model.addAttribute("pageInfo",pageDto);
         return "index";
     }
 
