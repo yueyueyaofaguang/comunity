@@ -30,7 +30,7 @@ public class IndexController {
     @GetMapping("/")
     public String index(@CookieValue(value = "token", required = false) String token,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
-                        @RequestParam(name = "size", defaultValue = "10") Integer size,
+                        @RequestParam(name = "size", defaultValue = "2") Integer size,
                         HttpServletRequest request,
                         Model model
     ) {
@@ -41,9 +41,7 @@ public class IndexController {
             User user = userMapper.findByToken(token);
             if (user != null) request.getSession().setAttribute("user", user);
         }
-        List<QuestionDto> questionList =   questionService.list(page,size);
-        PageDto pageDto = questionService.getPageDto();
-        model.addAttribute("questions", questionList);
+        PageDto pageDto =   questionService.list(page,size);
         model.addAttribute("pageInfo",pageDto);
         return "index";
     }

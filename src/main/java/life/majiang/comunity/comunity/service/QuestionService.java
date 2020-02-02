@@ -8,7 +8,6 @@ import life.majiang.comunity.comunity.model.Question;
 import life.majiang.comunity.comunity.model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,27 +20,29 @@ public class QuestionService {
     private UserMapper userMapper;
     @Autowired(required = false)
     private QuestionMapper questionMapper;
-    private PageDto pageDto = new PageDto();
 
-    public List<QuestionDto> list(Integer page, Integer size) {
-        List<Question> questions = questionMapper.list(size,(page-1)*size);
-        List<Question> questionList = questionMapper.listAll();
+    public PageDto list(Integer page, Integer size) {
+        PageDto pageDto = new PageDto();
+        Integer totalCount = questionMapper.count();
+        pageDto.setPagination(totalCount, page, size);
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > pageDto.getTotalPage()) {
+            page = pageDto.getTotalPage();
+        }
+
+        Integer offset = size * (page - 1);
+        List<Question> questions = questionMapper.list(offset, size);
         List<QuestionDto> questionDtoList = new ArrayList<>();
-        pageDto.setCount(Math.round(questionList.size()/size));
-        pageDto.setCurrentPage(page);
-        pageDto.setHasNext(page<pageDto.getCount());
         for (Question q : questions) {
             User user = userMapper.findById(q.getCreator());
             QuestionDto questionDto = new QuestionDto();
-            BeanUtils.copyProperties(q,questionDto);
+            BeanUtils.copyProperties(q, questionDto);
             questionDto.setUser(user);
             questionDtoList.add(questionDto);
         }
-        return questionDtoList;
-    }
-
-    public PageDto getPageDto() {
+        pageDto.setQuestions(questionDtoList);
         return pageDto;
     }
-
 }
