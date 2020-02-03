@@ -35,3 +35,20 @@ body {
 .sidebar{
     margin-top: 20px;
 }
+/**question的样式*/
+.main-title{
+    font-size: 25px;
+    line-height: 30px;
+}
+
+.main-desc{
+    color: #999;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.main-desc span{
+    display: inline-block;
+    padding-right: 6px;
+    border-right: 1px solid #999;
+}

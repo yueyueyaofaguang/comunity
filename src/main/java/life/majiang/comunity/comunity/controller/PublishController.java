@@ -51,10 +51,8 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
-        User user = null;
-        if (token != null) {
-            user = userMapper.findByToken(token);
-            if (user != null) request.getSession().setAttribute("user", user);
+        User user = (User)request.getSession().getAttribute("user");
+        if (user != null) {
             Question question = new Question();
             question.setTitle(title);
             question.setDescription(description);

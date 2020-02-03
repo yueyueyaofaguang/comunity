@@ -28,7 +28,7 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(@CookieValue(value = "token", required = false) String token,
+    public String index(
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "2") Integer size,
                         HttpServletRequest request,
@@ -37,10 +37,6 @@ public class IndexController {
         //1.判断cookies中是否含有token
         //2.利用token去查询数据库中是否有相同的用户
         //3.选择性展示信息
-        if (token != null) {
-            User user = userMapper.findByToken(token);
-            if (user != null) request.getSession().setAttribute("user", user);
-        }
         PageDto pageDto =   questionService.list(page,size);
         model.addAttribute("pageInfo",pageDto);
         return "index";
