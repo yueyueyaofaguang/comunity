@@ -17,6 +17,11 @@ public class PageDto {
     private Integer totalPage;
 
     public void setPagination(Integer totalCount,Integer page,Integer size){
+        if(totalCount == 0){
+            this.page = 0;
+            this.totalPage = 0;
+            return;
+        }
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
         } else {

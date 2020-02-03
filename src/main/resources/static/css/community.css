@@ -31,3 +31,7 @@ body {
     display: flex;
     justify-content: center;
 }
+
+.sidebar{
+    margin-top: 20px;
+}
