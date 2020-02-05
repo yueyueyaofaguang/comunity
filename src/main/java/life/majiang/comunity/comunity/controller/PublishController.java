@@ -4,13 +4,11 @@ import life.majiang.comunity.comunity.mapper.QuestionMapper;
 import life.majiang.comunity.comunity.mapper.UserMapper;
 import life.majiang.comunity.comunity.model.Question;
 import life.majiang.comunity.comunity.model.User;
+import life.majiang.comunity.comunity.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -21,14 +19,28 @@ public class PublishController {
     private UserMapper userMapper;
     @Autowired(required = false)
     private QuestionMapper questionMapper;
+    @Autowired(required = false)
+    private QuestionService questionService;
 
     @GetMapping("/publish")
     public String publish() {
         return "publish";
     }
 
+    @GetMapping("/publish/{id}")
+    public String publish(@PathVariable(name = "id") Integer id,
+                          Model model
+    ) {
+        Question question = questionMapper.selectByPrimaryKey(id);
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        return "publish";
+    }
+
     @PostMapping("/publish")
     public String doPublish(
+            @RequestParam(value = "id", required = false) Integer id,
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "tag", required = false) String tag,
@@ -58,9 +70,8 @@ public class PublishController {
             question.setDescription(description);
             question.setTag(tag);
             question.setCreator(user.getId());
-            question.setGmtCreate(System.currentTimeMillis());
-            question.setGmtModified(System.currentTimeMillis());
-            questionMapper.create(question);
+            question.setId(id);
+            questionService.createOrUpdate(question);
             return "redirect:";
         }
 
