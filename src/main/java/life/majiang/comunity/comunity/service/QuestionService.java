@@ -2,6 +2,9 @@ package life.majiang.comunity.comunity.service;
 
 import life.majiang.comunity.comunity.dto.PageDto;
 import life.majiang.comunity.comunity.dto.QuestionDto;
+import life.majiang.comunity.comunity.exception.CustomizeErrorCode;
+import life.majiang.comunity.comunity.exception.CustomizeException;
+import life.majiang.comunity.comunity.mapper.QuestionExMapper;
 import life.majiang.comunity.comunity.mapper.QuestionMapper;
 import life.majiang.comunity.comunity.mapper.UserMapper;
 import life.majiang.comunity.comunity.model.Question;
@@ -23,6 +26,8 @@ public class QuestionService {
     private UserMapper userMapper;
     @Autowired(required = false)
     private QuestionMapper questionMapper;
+    @Autowired(required = false)
+    private QuestionExMapper questionExMapper;
 
     public PageDto list(Integer page, Integer size) {
         PageDto pageDto = new PageDto();
@@ -85,6 +90,9 @@ public class QuestionService {
 
     public QuestionDto getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null){
+            throw  new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND.getMessage());
+        }
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question,questionDto);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -107,7 +115,17 @@ public class QuestionService {
             QuestionExample example = new QuestionExample();
             example.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, example);
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, example);
+            if(updated!=1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND.getMessage());
+            }
         }
+    }
+
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExMapper.incView(question);
     }
 }
