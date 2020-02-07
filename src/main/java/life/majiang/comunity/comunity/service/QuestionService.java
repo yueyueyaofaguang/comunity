@@ -76,7 +76,6 @@ public class QuestionService {
         Integer offset = size * (page - 1);
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset,size));
         List<QuestionDto> questionDtoList = new ArrayList<>();
-        UserExample userExample = new UserExample();
         for (Question q : questions) {
             User user = userMapper.selectByPrimaryKey(q.getCreator());
             QuestionDto questionDto = new QuestionDto();
@@ -91,7 +90,7 @@ public class QuestionService {
     public QuestionDto getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null){
-            throw  new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND.getMessage());
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question,questionDto);
@@ -117,7 +116,7 @@ public class QuestionService {
                     .andIdEqualTo(question.getId());
             int updated = questionMapper.updateByExampleSelective(updateQuestion, example);
             if(updated!=1){
-                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND.getMessage());
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
     }

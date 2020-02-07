@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class CustomizeErrorController implements ErrorController {
+public class CustomizeErrorController{
     @GetMapping("/error")
     public ModelAndView errorHandler(HttpServletRequest req, Throwable e, Model model) {
         // Get status code to determine which view should be returned
@@ -22,16 +22,10 @@ public class CustomizeErrorController implements ErrorController {
             message = "你这个请求错了吧，要不换个姿势";
         if(status.is5xxServerError())
             message = "服务器冒烟了，要不然你稍后试试";
-        if (e instanceof CustomizeException)
-            message = e.getMessage();
         model.addAttribute("message",message);
         // In this case, status code will be shown in a view
         ModelAndView mav = new ModelAndView("error");
         return mav;
-    }
-
-    public String getErrorPath() {
-        return "/error";
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
