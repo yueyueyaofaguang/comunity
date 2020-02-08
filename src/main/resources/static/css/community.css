@@ -44,3 +44,29 @@ body {
 .jumbotron{
     margin-bottom: 0px;
 }
+/**question-detail的样式**/
+.qustion-detail-header h1{
+    font-size: 25px;
+    line-height: 30px;
+}
+
+.qustion-detail-body{
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+.qustion-detail-footer{
+    margin: 10px 0 30px 0;
+}
+
+.qustion-detail .media-body{
+    vertical-align: middle;
+}
+
+.question-reply .media{
+    margin-bottom: 20px;
+}
+
+.bb{
+    border-bottom: 1px solid #eee;
+}

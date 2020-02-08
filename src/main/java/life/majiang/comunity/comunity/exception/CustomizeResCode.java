@@ -1,7 +1,7 @@
 package life.majiang.comunity.comunity.exception;
 
 public enum CustomizeResCode implements ICustomizeResCode {
-    SUCCESS(200,"成功"),
+    SUCCESS(200,"成功啦！"),
     QUESTION_NOT_FOUND(2001,"你的问题不在了，要不换个试试？"),
     TARGET_PARAM_NOT_FOUND(2002,"未选中任何问题或者评论进行回复"),
     TYPE_PARAM_WRONG(2005, "评论类型错误或不存在"),
