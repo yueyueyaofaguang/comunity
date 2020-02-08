@@ -1,9 +1,7 @@
 package life.majiang.comunity.comunity.advice;
 import life.majiang.comunity.comunity.dto.ResultDTO;
 import life.majiang.comunity.comunity.exception.GetJsonException;
-import life.majiang.comunity.comunity.exception.CustomizeResCode;
 import life.majiang.comunity.comunity.exception.GetPageException;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
