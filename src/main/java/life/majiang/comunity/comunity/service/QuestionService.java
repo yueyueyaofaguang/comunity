@@ -2,15 +2,15 @@ package life.majiang.comunity.comunity.service;
 
 import life.majiang.comunity.comunity.dto.PageDto;
 import life.majiang.comunity.comunity.dto.QuestionDto;
-import life.majiang.comunity.comunity.exception.CustomizeErrorCode;
-import life.majiang.comunity.comunity.exception.CustomizeException;
+import life.majiang.comunity.comunity.exception.CustomizeResCode;
+import life.majiang.comunity.comunity.exception.GetJsonException;
+import life.majiang.comunity.comunity.exception.GetPageException;
 import life.majiang.comunity.comunity.mapper.QuestionExMapper;
 import life.majiang.comunity.comunity.mapper.QuestionMapper;
 import life.majiang.comunity.comunity.mapper.UserMapper;
 import life.majiang.comunity.comunity.model.Question;
 import life.majiang.comunity.comunity.model.QuestionExample;
 import life.majiang.comunity.comunity.model.User;
-import life.majiang.comunity.comunity.model.UserExample;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class QuestionService {
         return pageDto;
     }
 
-    public PageDto list(Integer id, Integer page, Integer size) {
+    public PageDto list(Long id, Integer page, Integer size) {
         PageDto pageDto = new PageDto();
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria()
@@ -87,10 +87,10 @@ public class QuestionService {
         return pageDto;
     }
 
-    public QuestionDto getById(Integer id) {
+    public QuestionDto getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null){
-            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            throw new GetPageException(CustomizeResCode.QUESTION_NOT_FOUND);
         }
         QuestionDto questionDto = new QuestionDto();
         BeanUtils.copyProperties(question,questionDto);
@@ -116,12 +116,12 @@ public class QuestionService {
                     .andIdEqualTo(question.getId());
             int updated = questionMapper.updateByExampleSelective(updateQuestion, example);
             if(updated!=1){
-                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+                throw new GetPageException(CustomizeResCode.QUESTION_NOT_FOUND);
             }
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);

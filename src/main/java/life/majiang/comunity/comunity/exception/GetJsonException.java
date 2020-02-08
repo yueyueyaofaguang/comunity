@@ -1,10 +1,10 @@
 package life.majiang.comunity.comunity.exception;
 
-public class CustomizeException extends RuntimeException{
+public class GetJsonException extends RuntimeException{
     private String message;
     private Integer code;
 
-    public CustomizeException(ICustomizeErrorCode errorCode) {
+    public GetJsonException(ICustomizeResCode errorCode) {
         this.message = errorCode.getMessage();
         this.code = errorCode.getCode();
     }

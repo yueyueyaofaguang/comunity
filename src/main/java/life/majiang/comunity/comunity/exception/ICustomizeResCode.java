@@ -1,6 +1,6 @@
 package life.majiang.comunity.comunity.exception;
 
-public interface ICustomizeErrorCode {
-    String getMessage();
+public interface ICustomizeResCode {
     Integer getCode();
+    String getMessage();
 }

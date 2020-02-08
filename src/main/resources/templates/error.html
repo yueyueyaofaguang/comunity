@@ -14,8 +14,8 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="jumbotron">
-            <h1>出错啦～</h1>
-            <p th:text="${message}">biu~biu~biu~服务器正在解决你的问题，要不稍等一下再来？</p>
+            <h1>出错啦!!!!!</h1>
+            <p th:text="${message=='No message available'?'你找的资源不存在哦！':message}"></p>
             <p><a class="btn btn-primary btn-lg" href="/static" role="button">回到主页</a></p>
         </div>
     </div>
