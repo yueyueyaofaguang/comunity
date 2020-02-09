@@ -63,8 +63,38 @@ body {
     vertical-align: middle;
 }
 
+.question-comments .media{
+    padding-bottom: 15px;
+}
+
 .question-reply .media{
     margin-bottom: 20px;
+}
+
+.question-comments{
+    margin-bottom: 30px;
+}
+
+.question-comments .media-heading{
+    font-size: 14px;
+}
+
+.question-comments h1{
+    height: 60px;
+    line-height: 60px;
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.question-comment-icon{
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.question-comment-icon:before{
+    margin-right: 4px;
+    vertical-align: middle;
 }
 
 .bb{

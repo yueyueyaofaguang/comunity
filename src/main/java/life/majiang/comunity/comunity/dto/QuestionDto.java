@@ -3,6 +3,8 @@ package life.majiang.comunity.comunity.dto;
 import life.majiang.comunity.comunity.model.User;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class QuestionDto {
     private Long id;
@@ -11,6 +13,7 @@ public class QuestionDto {
     private Long gmtCreate;
     private Long gmtModified;
     private User user;
+    private List<QdCommentDTO> comments;
     private Integer commentCount;
     private Integer viewCount;
     private String tag;

@@ -1,16 +1,18 @@
 package life.majiang.comunity.comunity.service;
 
+import life.majiang.comunity.comunity.dto.CommentDTO;
 import life.majiang.comunity.comunity.dto.PageDto;
+import life.majiang.comunity.comunity.dto.QdCommentDTO;
 import life.majiang.comunity.comunity.dto.QuestionDto;
+import life.majiang.comunity.comunity.enums.CommentTypeEnum;
 import life.majiang.comunity.comunity.exception.CustomizeResCode;
 import life.majiang.comunity.comunity.exception.GetJsonException;
 import life.majiang.comunity.comunity.exception.GetPageException;
+import life.majiang.comunity.comunity.mapper.CommentMapper;
 import life.majiang.comunity.comunity.mapper.QuestionExMapper;
 import life.majiang.comunity.comunity.mapper.QuestionMapper;
 import life.majiang.comunity.comunity.mapper.UserMapper;
-import life.majiang.comunity.comunity.model.Question;
-import life.majiang.comunity.comunity.model.QuestionExample;
-import life.majiang.comunity.comunity.model.User;
+import life.majiang.comunity.comunity.model.*;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +30,15 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired(required = false)
     private QuestionExMapper questionExMapper;
+    @Autowired(required = false)
+    private CommentMapper commentMapper;
 
     public PageDto list(Integer page, Integer size) {
         PageDto pageDto = new PageDto();
         QuestionExample questionExample = new QuestionExample();
-        Integer totalCount = (int)questionMapper.countByExample(questionExample);
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
         pageDto.setPagination(totalCount, page, size);
-        if(totalCount == 0)
+        if (totalCount == 0)
             return pageDto;
         if (page < 1) {
             page = 1;
@@ -44,7 +48,7 @@ public class QuestionService {
         }
 
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample,new RowBounds(offset,size));
+        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question q : questions) {
             User user = userMapper.selectByPrimaryKey(q.getCreator());
@@ -61,10 +65,10 @@ public class QuestionService {
         PageDto pageDto = new PageDto();
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria()
-                        .andIdEqualTo(id);
-        Integer totalCount = (int)questionMapper.countByExample(questionExample);
+                .andIdEqualTo(id);
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
         pageDto.setPagination(totalCount, page, size);
-        if(totalCount == 0)
+        if (totalCount == 0)
             return pageDto;
         if (page < 1) {
             page = 1;
@@ -74,7 +78,7 @@ public class QuestionService {
         }
 
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset,size));
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question q : questions) {
             User user = userMapper.selectByPrimaryKey(q.getCreator());
@@ -89,23 +93,37 @@ public class QuestionService {
 
     public QuestionDto getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
-        if(question == null){
+        if (question == null) {
             throw new GetPageException(CustomizeResCode.QUESTION_NOT_FOUND);
         }
         QuestionDto questionDto = new QuestionDto();
-        BeanUtils.copyProperties(question,questionDto);
+        BeanUtils.copyProperties(question, questionDto);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDto.setUser(user);
-        return  questionDto;
+        CommentExample example = new CommentExample();
+        example.createCriteria()
+                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType())
+                .andParentIdEqualTo(id);
+        List<Comment> comments = commentMapper.selectByExample(example);
+        List<QdCommentDTO> qdCommentDTOList = new ArrayList<>();
+        for (Comment comment : comments) {
+            QdCommentDTO commentDTO = new QdCommentDTO();
+            User commentUser = userMapper.selectByPrimaryKey(comment.getCommentator());
+            BeanUtils.copyProperties(comment, commentDTO);
+            BeanUtils.copyProperties(commentUser, commentDTO);
+            qdCommentDTOList.add(commentDTO);
+        }
+        questionDto.setComments(qdCommentDTOList);
+        return questionDto;
     }
 
     public void createOrUpdate(Question question) {
         Question target = questionMapper.selectByPrimaryKey(question.getId());
-        if(target == null){
+        if (target == null) {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(System.currentTimeMillis());
             questionMapper.insertSelective(question);
-        }else{
+        } else {
             Question updateQuestion = new Question();
             updateQuestion.setGmtModified(System.currentTimeMillis());
             updateQuestion.setTitle(question.getTitle());
@@ -115,7 +133,7 @@ public class QuestionService {
             example.createCriteria()
                     .andIdEqualTo(question.getId());
             int updated = questionMapper.updateByExampleSelective(updateQuestion, example);
-            if(updated!=1){
+            if (updated != 1) {
                 throw new GetPageException(CustomizeResCode.QUESTION_NOT_FOUND);
             }
         }
