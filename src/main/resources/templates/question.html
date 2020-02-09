@@ -36,20 +36,20 @@
                 </div>
             </div>
             <div class="question-comments">
-                <h1 class="bb" th:text="${question.comments.size()+'个评论'}"></h1>
-                <div class="media bb" th:each="comment:${question.comments}">
+                <h1 class="bb" th:text="${comments.size()+'个评论'}"></h1>
+                <div class="media bb" th:each="comment:${comments}">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-circle" th:src="${comment.avatarUrl}">
+                            <img class="media-object img-circle" th:src="${comment.user.avatarUrl}">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading" th:text="${comment.getName()}"></h4>
+                        <h4 class="media-heading" th:text="${comment.user.name}"></h4>
                         <p th:text="${comment.content}"></p>
                         <div>
                             <span class="glyphicon glyphicon-thumbs-up question-comment-icon" aria-hidden="true" th:text="${comment.likeCount}+'赞'"></span>
                             <span class="glyphicon glyphicon-comment question-comment-icon" aria-hidden="true">留言</span>
-                            <span class="pull-right time" th:text="${#dates.format(question.getGmtModified(), 'yyyy-MM-dd HH:mm:ss')}"></span>
+                            <span class="pull-right time" th:text="${#dates.format(comment.getGmtModified(), 'yyyy-MM-dd HH:mm:ss')}"></span>
                         </div>
                     </div>
                 </div>

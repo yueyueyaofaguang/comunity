@@ -13,7 +13,6 @@ public class QuestionDto {
     private Long gmtCreate;
     private Long gmtModified;
     private User user;
-    private List<QdCommentDTO> comments;
     private Integer commentCount;
     private Integer viewCount;
     private String tag;

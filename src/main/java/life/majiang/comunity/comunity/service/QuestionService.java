@@ -1,12 +1,10 @@
 package life.majiang.comunity.comunity.service;
 
-import life.majiang.comunity.comunity.dto.CommentDTO;
 import life.majiang.comunity.comunity.dto.PageDto;
-import life.majiang.comunity.comunity.dto.QdCommentDTO;
+import life.majiang.comunity.comunity.dto.CommentDTO;
 import life.majiang.comunity.comunity.dto.QuestionDto;
 import life.majiang.comunity.comunity.enums.CommentTypeEnum;
 import life.majiang.comunity.comunity.exception.CustomizeResCode;
-import life.majiang.comunity.comunity.exception.GetJsonException;
 import life.majiang.comunity.comunity.exception.GetPageException;
 import life.majiang.comunity.comunity.mapper.CommentMapper;
 import life.majiang.comunity.comunity.mapper.QuestionExMapper;
@@ -100,20 +98,6 @@ public class QuestionService {
         BeanUtils.copyProperties(question, questionDto);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDto.setUser(user);
-        CommentExample example = new CommentExample();
-        example.createCriteria()
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType())
-                .andParentIdEqualTo(id);
-        List<Comment> comments = commentMapper.selectByExample(example);
-        List<QdCommentDTO> qdCommentDTOList = new ArrayList<>();
-        for (Comment comment : comments) {
-            QdCommentDTO commentDTO = new QdCommentDTO();
-            User commentUser = userMapper.selectByPrimaryKey(comment.getCommentator());
-            BeanUtils.copyProperties(comment, commentDTO);
-            BeanUtils.copyProperties(commentUser, commentDTO);
-            qdCommentDTOList.add(commentDTO);
-        }
-        questionDto.setComments(qdCommentDTOList);
         return questionDto;
     }
 

@@ -90,6 +90,11 @@ body {
 .question-comment-icon{
     display: inline-block;
     margin-right: 8px;
+    cursor: pointer;
+}
+
+.question-comment-icon:hover{
+    color: #499ef3;
 }
 
 .question-comment-icon:before{
