@@ -2,10 +2,12 @@ package life.majiang.comunity.comunity.controller;
 
 import life.majiang.comunity.comunity.dto.CommentCreateDTO;
 import life.majiang.comunity.comunity.dto.ResultDTO;
+import life.majiang.comunity.comunity.exception.CustomizeResCode;
 import life.majiang.comunity.comunity.mapper.CommentMapper;
 import life.majiang.comunity.comunity.model.Comment;
 import life.majiang.comunity.comunity.model.User;
 import life.majiang.comunity.comunity.service.CommentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +24,13 @@ public class CommentController {
     @ResponseBody
     @PostMapping("/comment")
     public ResultDTO post(@RequestBody CommentCreateDTO commentCreateDTO,
-                       HttpServletRequest request){
-        User user = (User)request.getSession().getAttribute("user");
-        if(user == null){
-            return ResultDTO.errorOf(2002,"未登录不能进行评论，请先登录");
+                          HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
+            return ResultDTO.errorOf(CustomizeResCode.NO_LOGIN);
+        }
+        if (commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())) {
+            return ResultDTO.errorOf(CustomizeResCode.COMMENT_NOT_FOUND);
         }
         Comment comment = new Comment();
         comment.setParentId(commentCreateDTO.getParentId());

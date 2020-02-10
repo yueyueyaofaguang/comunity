@@ -11,6 +11,7 @@ import life.majiang.comunity.comunity.mapper.QuestionExMapper;
 import life.majiang.comunity.comunity.mapper.QuestionMapper;
 import life.majiang.comunity.comunity.mapper.UserMapper;
 import life.majiang.comunity.comunity.model.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //为什么要分离出service层？
 @Service
@@ -128,5 +130,12 @@ public class QuestionService {
         question.setId(id);
         question.setViewCount(1);
         questionExMapper.incView(question);
+    }
+
+    public List<Question> selectRelaventById(Long id){
+        Question question = questionMapper.selectByPrimaryKey(id);
+        String keywords = StringUtils.replace(question.getTag(), ",", "|");
+        List<Question> questions = questionExMapper.selectRelavent(keywords);
+        return questions;
     }
 }

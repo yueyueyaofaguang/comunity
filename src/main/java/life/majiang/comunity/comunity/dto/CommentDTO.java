@@ -3,6 +3,8 @@ package life.majiang.comunity.comunity.dto;
 import life.majiang.comunity.comunity.model.User;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class CommentDTO {
         private Long id;
@@ -14,4 +16,5 @@ public class CommentDTO {
         private Long likeCount;
         private String content;
         private User user;
+        private List<CommentDTO> subComments;
 }

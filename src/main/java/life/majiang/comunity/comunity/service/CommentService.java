@@ -52,11 +52,12 @@ public class CommentService {
         }
     }
 
-    public List<CommentDTO> listByQuesyionId(Long id) {
+    public List<CommentDTO> listById(Long id,CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
                 .andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+                .andTypeEqualTo(type.getType());
+        commentExample.setOrderByClause("GMT_CREATE DESC");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
 
         if (comments.size() == 0) {
@@ -77,8 +78,10 @@ public class CommentService {
         //转换comment 为commentDTO
         List<CommentDTO> commentDTOS = comments.stream().map(comment->{
             CommentDTO commentDTO = new CommentDTO();
+            List<CommentDTO> subComment = listById(comment.getId(),CommentTypeEnum.COMMENT);
             BeanUtils.copyProperties(comment,commentDTO);
             commentDTO.setUser(userMap.get(comment.getCommentator()));
+            commentDTO.setSubComments(subComment);
             return commentDTO;
         }).collect(Collectors.toList());
         return commentDTOS;

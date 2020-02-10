@@ -87,6 +87,10 @@ body {
     color: #333;
 }
 
+.question-comments a{
+    color: #333;
+}
+
 .question-comment-icon{
     display: inline-block;
     margin-right: 8px;
@@ -97,9 +101,26 @@ body {
     color: #499ef3;
 }
 
+a[aria-expanded="true"]{
+    color: #499ef3;
+}
+
 .question-comment-icon:before{
     margin-right: 4px;
     vertical-align: middle;
+}
+
+.comment-extra{
+    margin-bottom: 20px;
+}
+
+.relaventQuestion-list{
+    padding: 0;
+    list-style-type: none;
+}
+
+.questions-detail-tag{
+    margin-right: 4px;
 }
 
 .bb{

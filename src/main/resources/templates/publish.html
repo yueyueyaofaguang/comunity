@@ -34,13 +34,32 @@
                     <input type="text" class="form-control" id="tag" name="tag" placeholder="输入标签，以，号分隔"
                            th:value="${tag}">
                 </div>
-                <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error!=null}">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <strong>Warning!</strong><span th:text="${error}"></span>
-                </div>
-                <button type="submit" class="btn btn-success btn-publish">发布</button>
             </form>
+            <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error!=null}">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <strong>Warning!</strong><span th:text="${error}"></span>
+            </div>
+            <div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+                    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane" id="home">1</div>
+                    <div role="tabpanel" class="tab-pane" id="profile">2</div>
+                    <div role="tabpanel" class="tab-pane" id="messages">3</div>
+                    <div role="tabpanel" class="tab-pane" id="settings">4</div>
+                </div>
+
+            </div>
+            <button type="submit" class="btn btn-success btn-publish">发布</button>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>问题发起指南</h3>

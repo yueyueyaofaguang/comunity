@@ -1,9 +1,18 @@
-function replyQuestion() {
-    let data = {
-        parentId: $("#parentId").val(),
-        content: $("#description").val(),
-        type: 1
+function reply() {
+    let parentId = $(this).parent().find("[data-ipt='parentId']").val();
+    let content = $(this).parent().find("[data-ipt='description']").val();
+    let type = $(this).attr('data-type');
+    if (!content) {
+        alert("输入内容不能为空");
+        return;
     }
+
+    let data = {
+        parentId: parentId,
+        content: content,
+        type: type
+    };
+
     $.ajax({
         type: "post",
         url: "/comment",
@@ -14,7 +23,7 @@ function replyQuestion() {
             console.log(rep);
             alert(rep.message);
             if (rep.code == 200) {
-                $("#description").val("");
+                location.reload();
             }
         },
         error: (message) => {
@@ -22,3 +31,11 @@ function replyQuestion() {
         }
     })
 }
+
+$(document).ready(function() {
+    $(".btn-reply").click(reply);
+    $('#myTabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    })
+});
