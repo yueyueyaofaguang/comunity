@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="/css/community.css">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
-    <script src="/js/community.js"></script>
+    <script src="/static/js/question.js"></script>
 </head>
 <body>
 <div th:insert="fragments/navbar :: nav"></div>
@@ -35,12 +35,10 @@
                     </a>
                 </div>
                 <div class="questions-detail-tags">
-                    <block th:each="tag:${question.tag.split(',')}">
-                        <span class="label label-info questions-detail-tag ">
+                        <span class="label label-info questions-detail-tag " th:each="tag:${question.tag.split(',')}">
                             <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
                             <span th:text="${tag}"></span>
                         </span>
-                    </block>
                 </div>
             </div>
             <div class="question-comments">

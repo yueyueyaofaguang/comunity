@@ -119,8 +119,19 @@ a[aria-expanded="true"]{
     list-style-type: none;
 }
 
+.glyphicon-tag:before{
+    vertical-align: middle;
+}
+
 .questions-detail-tag{
-    margin-right: 4px;
+    display: inline-block;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    cursor: pointer;
+}
+
+.tab-content{
+    padding-top: 10px;
 }
 
 .bb{

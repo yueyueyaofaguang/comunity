@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/community.css">
     <script type="application/javascript" src="/js/jquery.min.js"></script>
     <script type="application/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="application/javascript" src="/js/publish.js"></script>
 </head>
 <body>
 <div th:insert="fragments/navbar :: nav"></div>
@@ -31,8 +32,8 @@
                 </div>
                 <div class="form-group">
                     <label for="title">添加标签:</label>
-                    <input type="text" class="form-control" id="tag" name="tag" placeholder="输入标签，以，号分隔"
-                           th:value="${tag}">
+                    <input type="text" class="form-control" id="tagIpt" name="tag" placeholder="输入标签，以，号分隔"
+                           th:value="${tag}" autocomplete="off">
                 </div>
             </form>
             <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error!=null}">
@@ -40,24 +41,25 @@
                         aria-hidden="true">&times;</span></button>
                 <strong>Warning!</strong><span th:text="${error}"></span>
             </div>
-            <div>
-
-                <!-- Nav tabs -->
+            <div class="tag-select-pancel">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
-                    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+                    <li role="presentation" th:each="tags,tagsStat:${tagList}" th:class="${tagsStat.first?'active':''}">
+                        <a th:href="'#'+${tags.categoryName}"
+                           th:aria-controls="${tags.categoryName}"
+                           th:text="${tags.categoryName}" role="tab"
+                           data-toggle="tab">
+                        </a>
+                    </li>
                 </ul>
-
-                <!-- Tab panes -->
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane" id="home">1</div>
-                    <div role="tabpanel" class="tab-pane" id="profile">2</div>
-                    <div role="tabpanel" class="tab-pane" id="messages">3</div>
-                    <div role="tabpanel" class="tab-pane" id="settings">4</div>
+                    <div role="tabpanel" th:each="tags,tagsStat:${tagList}" th:id="${tags.categoryName}" th:class="${tagsStat.first?'tab-pane active':'tab-pane'}">
+                        <span class="label label-info questions-detail-tag" th:data-tagName="${tag}"
+                                      th:each="tag:${tags.tags}">
+                            <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+                            <span th:text="${tag}">1234</span>
+                        </span>
+                    </div>
                 </div>
-
             </div>
             <button type="submit" class="btn btn-success btn-publish">发布</button>
         </div>

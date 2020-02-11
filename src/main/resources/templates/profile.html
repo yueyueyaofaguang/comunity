@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>${sectionName}</title>
+    <title th:text="${sectionName}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
@@ -25,8 +25,9 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading" th:text="${question.title}"></h4>
-                        <span th:text="${question.description}"></span><br>
+                        <h4 class="media-heading">
+                            <a th:href="@{'/question/'+ ${question.id}}" th:text="${question.title}"></a>
+                        </h4>
                         <span class="text-font" th:text="${'•'+question.commentCount+'个评论'}"></span>
                         <span class="text-font" th:text="${'•'+question.viewCount+'次浏览'}"></span>
                         <span class="text-font"
@@ -42,22 +43,22 @@
                         </a>
                     </li>
                     <li th:if="${pageInfo.showPrevious}">
-                        <a  th:href="@{/(page=${pageInfo.page - 1})}"  aria-label="Previous">
+                        <a th:href="@{'/profile/'+${section}(page=${pageInfo.page - 1})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
 
                     <li th:each="page : ${pageInfo.pages}" th:class="${pageInfo.page == page}? 'active' : ''">
-                        <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+                        <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a>
                     </li>
 
                     <li th:if="${pageInfo.showNext}">
-                        <a th:href="@{/(page=${pageInfo.page +1 })}" aria-label="Previous">
+                        <a th:href="@{'/profile/'+${section}(page=${pageInfo.page +1})}" aria-label="Previous">
                             <span aria-hidden="true">&gt;</span>
                         </a>
                     </li>
                     <li th:if="${pageInfo.showEndPage}">
-                        <a th:href="@{/(page=${pageInfo.totalPage})}"  aria-label="Previous">
+                        <a th:href="@{'/profile/'+${section}(page=${pageInfo.totalPage})}" aria-label="Previous">
                             <span aria-hidden="true">&gt;&gt;</span>
                         </a>
                     </li>

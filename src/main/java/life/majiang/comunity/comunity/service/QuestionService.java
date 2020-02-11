@@ -65,7 +65,7 @@ public class QuestionService {
         PageDto pageDto = new PageDto();
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria()
-                .andIdEqualTo(id);
+                .andCreatorEqualTo(id);
         Integer totalCount = (int) questionMapper.countByExample(questionExample);
         pageDto.setPagination(totalCount, page, size);
         if (totalCount == 0)
