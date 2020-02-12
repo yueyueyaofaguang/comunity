@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/community.css">
     <script type="application/javascript" src="/js/jquery.min.js"></script>
     <script type="application/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="application/javascript" src="/js/profile.js"></script>
 </head>
 <body>
 <div th:insert="fragments/navbar :: nav"></div>
@@ -16,8 +17,8 @@
         <div class="col-lg-9 col-md-12 col-xs-12">
             <h2 th:text="${sectionName}">发现</h2>
             <hr>
-            <ul class="media-list">
-                <li class="media" th:each="question : ${pageInfo.questions}">
+            <ul class="questions_list media-list" th:if="${section == 'questions'}">
+                <li class="media" th:each="question : ${pageInfo.data}" >
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-rounded"
@@ -33,6 +34,21 @@
                         <span class="text-font"
                               th:text="${#dates.format(question.getGmtModified(), 'yyyy-MM-dd HH:mm:ss')}"></span>
                     </div>
+                </li>
+            </ul>
+            <ul class="notifications_list" th:if="${section == 'replies'}">
+                <li th:each="notification : ${pageInfo.data}">
+                    <p>
+                        <span th:text="${notification.notifier.name}"></span>
+                        <span th:text="${notification.type}"></span>
+                        <span th:text="${'回复了' + (notification.type==0?'问题':'评论')}"></span>
+                        <a th:href="@{'/question/'+ ${notification.question.id}}" class="changeStateBtn"
+                           th:data-id="${notification.id}" th:data-status="${notification.status}">
+                            <span th:text="${notification.question.title}"></span>
+                        </a>
+                        <span class="label label-warning" th:if="${notification.status == 0}">未读</span>
+                    </p>
+                    <p></p>
                 </li>
             </ul>
             <nav aria-label="Page navigation" th:if="${pageInfo.getTotalPage()!=0}">
@@ -70,7 +86,7 @@
                 <a href="/profile/questions" th:class="${((section == 'questions')?'active':'')+' list-group-item'}">我的问题</a>
                 <a href="/profile/replies" th:class="${((section =='replies')?'active':'')+' list-group-item'}">
                     最新回复
-                    <span class="badge">14</span>
+                    <span class="badge" th:text="${session.notifiyCount}"></span>
                 </a>
             </div>
         </div>

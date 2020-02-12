@@ -1,9 +1,7 @@
 package life.majiang.comunity.comunity.service;
 
 import life.majiang.comunity.comunity.dto.PageDto;
-import life.majiang.comunity.comunity.dto.CommentDTO;
 import life.majiang.comunity.comunity.dto.QuestionDto;
-import life.majiang.comunity.comunity.enums.CommentTypeEnum;
 import life.majiang.comunity.comunity.exception.CustomizeResCode;
 import life.majiang.comunity.comunity.exception.GetPageException;
 import life.majiang.comunity.comunity.mapper.CommentMapper;
@@ -19,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 //为什么要分离出service层？
 @Service
@@ -57,7 +54,7 @@ public class QuestionService {
             questionDto.setUser(user);
             questionDtoList.add(questionDto);
         }
-        pageDto.setQuestions(questionDtoList);
+        pageDto.setData(questionDtoList);
         return pageDto;
     }
 
@@ -87,7 +84,7 @@ public class QuestionService {
             questionDto.setUser(user);
             questionDtoList.add(questionDto);
         }
-        pageDto.setQuestions(questionDtoList);
+        pageDto.setData(questionDtoList);
         return pageDto;
     }
 

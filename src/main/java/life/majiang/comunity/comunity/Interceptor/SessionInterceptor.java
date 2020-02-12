@@ -1,6 +1,10 @@
 package life.majiang.comunity.comunity.Interceptor;
 
+import life.majiang.comunity.comunity.enums.NotificationStatusEnum;
+import life.majiang.comunity.comunity.mapper.NotificationMapper;
 import life.majiang.comunity.comunity.mapper.UserMapper;
+import life.majiang.comunity.comunity.model.Notification;
+import life.majiang.comunity.comunity.model.NotificationExample;
 import life.majiang.comunity.comunity.model.User;
 import life.majiang.comunity.comunity.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,8 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor{
     @Autowired(required = false)
     UserMapper userMapper;
+    @Autowired(required = false)
+    NotificationMapper notificationMapper;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -34,6 +40,11 @@ public class SessionInterceptor implements HandlerInterceptor{
                 }
             }
         request.getSession().setAttribute("user",user);
+
+        NotificationExample notificationExample = new NotificationExample();
+            notificationExample.createCriteria().andReceiverEqualTo(user.getId()).andStatusEqualTo(NotificationStatusEnum.UNREAD.getStatus());
+        List<Notification> notificationList = notificationMapper.selectByExample(notificationExample);
+        request.getSession().setAttribute("notifiyCount",notificationList.size());
         return true;
     }
 }

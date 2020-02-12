@@ -6,9 +6,11 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/editormd.min.css"/>
     <script type="application/javascript" src="/js/jquery.min.js"></script>
     <script type="application/javascript" src="/js/bootstrap.min.js"></script>
     <script type="application/javascript" src="/js/publish.js"></script>
+    <script type="application/javascript" src="/js/editormd.min.js"></script>
 </head>
 <body>
 <div th:insert="fragments/navbar :: nav"></div>
@@ -27,14 +29,19 @@
                 </div>
                 <div class="form-group">
                     <label for="description">问题补充 (必填，请参照右侧提示):</label>
-                    <textarea name="description" id="description" class="form-control" cols="30"
-                              rows="10" th:text="${description}"></textarea>
+<!--                    <textarea name="description" id="description" class="form-control" cols="30"-->
+<!--                              rows="10" th:text="${description}"></textarea>-->
+                    <div id="test-editor">
+                        <textarea style="display:none;" name="description" id="description">### Editor.md.
+                        </textarea>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="title">添加标签:</label>
+                    <label for="tagIpt">添加标签:</label>
                     <input type="text" class="form-control" id="tagIpt" name="tag" placeholder="输入标签，以，号分隔"
                            th:value="${tag}" autocomplete="off">
                 </div>
+                <button type="submit" class="btn btn-success btn-publish">发布</button>
             </form>
             <div class="alert alert-warning alert-dismissible" role="alert" th:if="${error!=null}">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
@@ -52,16 +59,17 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" th:each="tags,tagsStat:${tagList}" th:id="${tags.categoryName}" th:class="${tagsStat.first?'tab-pane active':'tab-pane'}">
+                    <div role="tabpanel" th:each="tags,tagsStat:${tagList}" th:id="${tags.categoryName}"
+                         th:class="${tagsStat.first?'tab-pane active':'tab-pane'}">
                         <span class="label label-info questions-detail-tag" th:data-tagName="${tag}"
-                                      th:each="tag:${tags.tags}">
+                              th:each="tag:${tags.tags}">
                             <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
                             <span th:text="${tag}">1234</span>
                         </span>
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-success btn-publish">发布</button>
+
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>问题发起指南</h3>

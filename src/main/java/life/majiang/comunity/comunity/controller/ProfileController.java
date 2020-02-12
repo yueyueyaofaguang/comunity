@@ -1,8 +1,11 @@
 package life.majiang.comunity.comunity.controller;
 
+import life.majiang.comunity.comunity.dto.NotificationDTO;
 import life.majiang.comunity.comunity.dto.PageDto;
+import life.majiang.comunity.comunity.dto.QuestionDto;
 import life.majiang.comunity.comunity.mapper.UserMapper;
 import life.majiang.comunity.comunity.model.User;
+import life.majiang.comunity.comunity.service.NotificationService;
 import life.majiang.comunity.comunity.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,29 +22,34 @@ public class ProfileController {
     private UserMapper userMapper;
     @Autowired(required = false)
     private QuestionService questionService;
+    @Autowired(required = false)
+    private NotificationService notificationService;
 
     @GetMapping("/profile/{action}")
     public String profile(
-                          @PathVariable(name = "action")String action,
-                          @RequestParam(name = "page", defaultValue = "1") Integer page,
-                          @RequestParam(name = "size", defaultValue = "2") Integer size,
-                          HttpServletRequest request,
-                          Model model){
-        User user = (User)request.getSession().getAttribute("user");
+            @PathVariable(name = "action") String action,
+            @RequestParam(name = "page", defaultValue = "1") Integer page,
+            @RequestParam(name = "size", defaultValue = "2") Integer size,
+            HttpServletRequest request,
+            Model model) {
+        User user = (User) request.getSession().getAttribute("user");
 
-        if (user!=null) {
-            if("questions".equals(action)){
-                model.addAttribute("section","questions");
-                model.addAttribute("sectionName","我的提问");
-            }else if("replies".equals(action)){
-                model.addAttribute("section","replies");
-                model.addAttribute("sectionName","我的回复");
-            }
-            PageDto pageDto = questionService.list(user.getId(), page, size);
-            model.addAttribute("pageInfo",pageDto);
-            return "profile";
+        if (user == null) {
+            return "redirect:";
         }
 
-        return "redirect:";
+        if ("questions".equals(action)) {
+            model.addAttribute("section", "questions");
+            model.addAttribute("sectionName", "我的提问");
+            PageDto<QuestionDto> pageDto = questionService.list(user.getId(), page, size);
+            model.addAttribute("pageInfo", pageDto);
+        } else if ("replies".equals(action)) {
+            PageDto<NotificationDTO> pageDto = notificationService.list(user.getId(),page,size);
+            model.addAttribute("section", "replies");
+            model.addAttribute("sectionName", "我的回复");
+            model.addAttribute("pageInfo", pageDto);
+        }
+        return "profile";
+
     }
 }

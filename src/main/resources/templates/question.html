@@ -6,9 +6,13 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/editormd.preview.min.css">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
-    <script src="/static/js/question.js"></script>
+    <script src="/js/question.js"></script>
+    <script src="/js/editormd.min.js"></script>
+    <script src="/js/lib/marked.min.js"></script>
+    <script src="/js/lib/prettify.min.js"></script>
 </head>
 <body>
 <div th:insert="fragments/navbar :: nav"></div>
@@ -25,7 +29,9 @@
                     </p>
                 </div>
                 <div class="qustion-detail-body bb">
-                    <p th:text="${question.description}"></p>
+                    <div id="markdown-view">
+                        <textarea style="display:none;" th:text="${question.description}"></textarea>
+                    </div>
                 </div>
                 <div class="qustion-detail-footer">
                     <a th:href="@{'/publish/'+${question.id}}" class="community-menu"
