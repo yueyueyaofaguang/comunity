@@ -1,46 +1,53 @@
 package life.majiang.comunity.comunity.provider;
+
+import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
+import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.qiniu.common.Zone;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 
 @Controller
 public class QiniuProvider {
     @Value("${qiniu.access.key}")
-    private String accesskey;
+    private String accessKey;
 
     @Value("${qiniu.secret.key}")
     private String secretKey;
 
     @Value("${qiniu.bucket.name}")
-    private String bucketName;
+    private String bucket;
 
-    @Autowired(required = false)
-    private UploadManager uploadManager;
+    public String upload(String filePath) {
+        //构造一个带指定 Region 对象的配置类
+        Configuration cfg = new Configuration(Zone.zone0());
+        //...其他参数参考类注释
+        UploadManager uploadManager = new UploadManager(cfg);
+        //...生成上传凭证，然后准备上传
+        String key = null;
 
-    private Auth auth = Auth.create(accesskey, secretKey);
+        Auth auth = Auth.create(accessKey, secretKey);
+        String upToken = auth.uploadToken(bucket);
 
-    public void upload(String filePath, String fileName) throws IOException {
         try {
-            //调用put方法上传
-            Response res = uploadManager.put(filePath, fileName, auth.uploadToken(bucketName));
-            //打印返回的信息
-            System.out.println(res.bodyString());
-        } catch (QiniuException e) {
-            Response r = e.response;
-            // 请求失败时打印的异常的信息
-            //System.out.println(r.toString());
+            Response response = uploadManager.put(filePath, key, upToken);
+            //解析上传成功的结果
+            DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+            return putRet.key;
+        } catch (QiniuException ex) {
+            Response r = ex.response;
+            System.err.println(r.toString());
             try {
-                //响应的文本信息
-                System.out.println(r.bodyString());
-            } catch (QiniuException e1) {
+                System.err.println(r.bodyString());
+            } catch (QiniuException ex2) {
                 //ignore
             }
         }
+        return "";
     }
 }
