@@ -18,6 +18,16 @@ $(document).ready(function() {
         imageUpload    : true,
         imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
         imageUploadURL : "file/upload",
+        toolbarIconsClass : {
+            qiniu : "fa-cloud-upload"
+        },
+        toolbarHandlers : {
+            qiniu : function(cm, icon, cursor, selection) {
+                this.imageDialogQiniu();
+            }
+        },
+        qiniuTokenUrl : "/getQiniuToken",                        //本地服务器获取七牛token的url
+        qiniuPublishUrl : "https://q5l5ljewq.bkt.clouddn.com"    //远程七牛服务器个人发布地址
     });
     $(".questions-detail-tag").click(addTagToIPt);
     $(".tag-select-pancel").hide();
