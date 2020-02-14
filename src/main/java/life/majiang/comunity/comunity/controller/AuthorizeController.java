@@ -7,6 +7,7 @@ import life.majiang.comunity.comunity.mapper.UserMapper;
 import life.majiang.comunity.comunity.model.User;
 import life.majiang.comunity.comunity.provider.GithubProvider;
 import life.majiang.comunity.comunity.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired
     private GithubProvider githubProvider;
@@ -60,6 +62,7 @@ public class AuthorizeController {
             return "redirect:";
             //登录成功，写cookie和session
         } else {
+            log.error("github对象授权不成功1");
             return "redirect:";
         }
     }

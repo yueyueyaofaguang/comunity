@@ -71,6 +71,10 @@ body {
     margin-bottom: 20px;
 }
 
+.question-reply-tip{
+    text-align: center;
+}
+
 .question-comments{
     margin-bottom: 30px;
 }

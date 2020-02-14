@@ -58,6 +58,7 @@ public class CommentService {
     }
     
     public void createNotify(Long notifier, Long receiver, Long outerid, NotificationTypeEnum notificationTypeEnum, Long relatedQuestion) {
+        if(notifier == receiver) return;
         Notification notification = new Notification();
         notification.setNotifier(notifier);
         notification.setReceiver(receiver);

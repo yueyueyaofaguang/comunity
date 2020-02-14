@@ -40,4 +40,21 @@
     <select id="selectRelavent" parameterType="string" resultMap="ResultMapWithBLOBs">
         select * from QUESTION where TAG REGEXP #{keyword}
     </select>
+    <select id="countByQuery" parameterType="string" resultType="Integer">
+        select count(*) from QUESTION
+        <where>
+            <if test="search!=null and search!=''">
+                title REGEXP #{search}
+            </if>
+        </where>
+    </select>
+    <select id="selectByQuery" parameterType="life.majiang.comunity.comunity.dto.QuestionQuery" resultMap="ResultMapWithBLOBs">
+        select * from QUESTION
+        <where>
+            <if test="search!=null and search!=''">
+                title REGEXP #{search}
+            </if>
+        </where>
+        order by gmt_create desc limit #{offset},#{size}
+    </select>
 </mapper>

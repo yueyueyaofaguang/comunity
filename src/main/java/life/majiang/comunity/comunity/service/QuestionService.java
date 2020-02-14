@@ -2,6 +2,7 @@ package life.majiang.comunity.comunity.service;
 
 import life.majiang.comunity.comunity.dto.PageDto;
 import life.majiang.comunity.comunity.dto.QuestionDto;
+import life.majiang.comunity.comunity.dto.QuestionQuery;
 import life.majiang.comunity.comunity.exception.CustomizeResCode;
 import life.majiang.comunity.comunity.exception.GetPageException;
 import life.majiang.comunity.comunity.mapper.CommentMapper;
@@ -30,10 +31,9 @@ public class QuestionService {
     @Autowired(required = false)
     private CommentMapper commentMapper;
 
-    public PageDto list(Integer page, Integer size) {
+    public PageDto list(String search,Integer page, Integer size) {
         PageDto pageDto = new PageDto();
-        QuestionExample questionExample = new QuestionExample();
-        Integer totalCount = (int) questionMapper.countByExample(questionExample);
+        Integer totalCount = (int) questionExMapper.countByQuery(search);
         pageDto.setPagination(totalCount, page, size);
         if (totalCount == 0)
             return pageDto;
@@ -45,7 +45,11 @@ public class QuestionService {
         }
 
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.selectByExampleWithBLOBsWithRowbounds(questionExample, new RowBounds(offset, size));
+        QuestionQuery questionQuery = new QuestionQuery();
+        questionQuery.setSearch(search);
+        questionQuery.setOffset(offset);
+        questionQuery.setSize(size);
+        List<Question> questions = questionExMapper.selectByQuery(questionQuery);
         List<QuestionDto> questionDtoList = new ArrayList<>();
         for (Question q : questions) {
             User user = userMapper.selectByPrimaryKey(q.getCreator());

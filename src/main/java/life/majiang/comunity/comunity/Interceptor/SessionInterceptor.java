@@ -39,12 +39,18 @@ public class SessionInterceptor implements HandlerInterceptor{
                     if(users.size()!=0) user = users.get(0);
                 }
             }
-        request.getSession().setAttribute("user",user);
 
-        NotificationExample notificationExample = new NotificationExample();
-            notificationExample.createCriteria().andReceiverEqualTo(user.getId()).andStatusEqualTo(NotificationStatusEnum.UNREAD.getStatus());
-        List<Notification> notificationList = notificationMapper.selectByExample(notificationExample);
-        request.getSession().setAttribute("notifiyCount",notificationList.size());
+        if(user !=null){
+            request.getSession().setAttribute("user",user);
+            NotificationExample notificationExample = new NotificationExample();
+            notificationExample.createCriteria()
+                    .andReceiverEqualTo(user.getId())
+                    .andStatusEqualTo(NotificationStatusEnum.UNREAD.getStatus());
+            notificationExample.setOrderByClause("GMT_CREATE DESC");
+            List<Notification> notificationList = notificationMapper.selectByExample(notificationExample);
+            request.getSession().setAttribute("notifiyCount",notificationList.size());
+        }
+
         return true;
     }
 }
