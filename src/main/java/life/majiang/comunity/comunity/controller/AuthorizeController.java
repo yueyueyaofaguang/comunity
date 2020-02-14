@@ -1,6 +1,4 @@
 package life.majiang.comunity.comunity.controller;
-
-import com.sun.deploy.net.HttpResponse;
 import life.majiang.comunity.comunity.dto.AccessTokenDTO;
 import life.majiang.comunity.comunity.dto.GithubUser;
 import life.majiang.comunity.comunity.mapper.UserMapper;
