@@ -3,14 +3,16 @@ package life.majiang.comunity.comunity.provider;
 import com.alibaba.fastjson.JSON;
 import life.majiang.comunity.comunity.dto.AccessTokenDTO;
 import life.majiang.comunity.comunity.dto.GithubUser;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 
 @Controller()
+@Slf4j
 public class GithubProvider {
-    public String getAccessToken(AccessTokenDTO accessTokenDTO) throws IOException {
+    public String getAccessToken(AccessTokenDTO accessTokenDTO){
         MediaType mediaType= MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(mediaType,JSON.toJSONBytes(accessTokenDTO));
@@ -23,6 +25,7 @@ public class GithubProvider {
             String token = s.split("&")[0].split("=")[1];
             return token;
         }catch (Exception e){
+            log.error(e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -38,6 +41,9 @@ public class GithubProvider {
             String s = response.body().string();
             GithubUser githubUser = JSON.parseObject(s, GithubUser.class);
             return githubUser;
+        }catch (Exception e){
+            log.error(e.getMessage());
         }
+        return null;
     }
 }
