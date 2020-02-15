@@ -25,7 +25,6 @@ public class GithubProvider {
             String token = s.split("&")[0].split("=")[1];
             return token;
         }catch (Exception e){
-            log.error(e.getMessage());
             e.printStackTrace();
         }
         return null;
